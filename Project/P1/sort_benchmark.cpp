@@ -125,7 +125,7 @@ static void custom_args(benchmark::internal::Benchmark *b)
 
 BENCHMARK(BM_bubble_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();        //用于注册测试函数
 BENCHMARK(BM_insertion_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();     //用于注册测试函数
-BENCHMARK(BM_selection_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();      //用于注册测试函数
+BENCHMARK(BM_selection_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();     //用于注册测试函数
 BENCHMARK(BM_merge_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();         //用于注册测试函数
 BENCHMARK(BM_quick_sort_extra)->RangeMultiplier(10)->Apply(custom_args)->Complexity();   //用于注册测试函数
 BENCHMARK(BM_quick_sort_inplace)->RangeMultiplier(10)->Apply(custom_args)->Complexity(); //用于注册测试函数
