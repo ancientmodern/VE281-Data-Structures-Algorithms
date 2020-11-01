@@ -1,0 +1,131 @@
+\documentclass[14pt]{article}
+\usepackage{indentfirst}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath} 
+\usepackage{booktabs}
+\usepackage{gensymb}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{minted}
+\usemintedstyle{autumn}
+\setminted{linenos,breaklines,tabsize=4,xleftmargin=1.5em}
+
+\lstset{
+    columns=fixed,       
+    numbers=left,                                        % 在左侧显示行号
+    frame=none, %tb,                                     % 不显示背景边框
+    backgroundcolor=\color[RGB]{244,244,244},            % 设定背景颜色：浅晦涩，近透明
+    keywordstyle=\color[RGB]{40,40,255},                 % 设定关键字颜色
+    numberstyle=\footnotesize\color{darkgray},           % 设定行号格式
+    commentstyle=\it\color[RGB]{0,96,96},                % 设置代码注释的格式
+    stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},   % 设置字符串格式
+    showstringspaces=false,                              % 不显示字符串中的空格
+    language=C++,                                        % 设置语言C, C++, bash, Fortran, Python, TeX, make
+    basicstyle=\small, %\scriptsize%\tiny%\footnotesize  % basic fontsize in it
+    breaklines=true
+}
+
+\setlength{\parindent}{2em}
+\setlength{\baselineskip}{25pt}
+
+\geometry{a4paper,left=3cm,right=3cm,top=3cm,bottom=3cm}
+\renewcommand\thesection{\Roman{section}}
+\renewcommand\thesubsection{\indent{\Alph{subsection}}}
+\begin{document}
+\renewcommand\thesection{\arabic{section}} 
+\begin{large}
+	\begin{center}
+		\rule[-1pt]{10.3cm}{0.05em} \\~\\UM-SJTU JOINT INSTITUTE\\~\\Data Structures and Algorithms\\(VE281)
+		~\\  \rule[-1pt]{10.3cm}{0.05em} \vspace{7cm} \\Project Report
+	\end{center}
+\end{large}
+~\\
+\begin{normalsize}
+	\begin{center}
+		Project 1
+	\end{center}
+\end{normalsize}
+\vspace{4cm}
+\begin{tabular}{l l l}
+	Name: Haorong Lu&ID: 518370910194\\
+	&&\\
+	&&\\
+	Date: 1 November 2020&&\\
+\end{tabular}
+\newpage
+
+\section{Test Setup}
+In this test, we measure the performance of bubble sort, insertion sort, selection sort, merge sort, extra space quick sort,
+in-place quick sort as well as the provided \lstinline[language=c++]|std::sort()|.
+
+The test is based on Ubuntu 20.04 LTS, gcc 9.3.0 with $16 \times 2900 MHz$ CPUs. For simplicity, 
+I use Google Benchmark to do the test so that I can get nanosecond level time and the 
+average execution time for several cases easily. The command I use to compile and execute is 
+
+\begin{minted}{bash}
+g++ main.cpp -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o main -Ofast
+./main --benchmark_out=test.csv --benchmark_out_format=csv
+\end{minted}
+
+\lstinline[language=bash]|-Ofast| is turned on because if I do not apply the compiler optimization, the \lstinline[language=c++]|std::sort()| will always
+be slower than my \lstinline[language=c++]|quick_sort_inplace()|, which is unreasonable, so I enable \lstinline[language=bash]|-Ofast| to 
+optimize the performance of STL functions.
+
+\section{Result}
+
+\begin{figure}[H]
+	\centerline{\includegraphics[height=7.5cm,width=14cm]{normal.PNG}}
+	\caption{$<= 9 \times 10^4$ Cases for All Sorting Algorithms.}
+\end{figure}
+
+First we plot the performance of all sorting algorithms when the size of input arrays is in the interval $[1\times 10^4, 9\times 10^4]$, from 
+the graph above, we can observe that when the input size becomes larger, the execution times of bubble sort, insertion sort, selection sort 
+increase rapidly, and bubble sort has a bigger constant, while the other four sorting algorithms do not show significant growth. We can 
+confirm that the time complexity of bubble sort, insertion sort, selection sort is $O(n^2)$, and merge sort, quick sort have $O(nlogn)$ time complexity.
+
+To show the difference between four $O(nlogn)$ sorting algorithms, we plot the performance of them when the size of input arrays is in the interval $[5\times 10^4, 1\times 10^6]$,
+
+\begin{figure}[H]
+	\centerline{\includegraphics[height=7.5cm,width=13.5cm]{big.PNG}}
+	\caption{Big Size Cases for $O(nlogn)$ Sorting Algorithms.}
+\end{figure}
+
+We can observe that when the input size becomes bigger, in-place quick sort performs better than extra space quick sort and merge sort, that's because in-place 
+quick sort save the time of allocating some new arrays, though this step only has $O(1)$ time complexity, when the size 
+is quite big, the constant will be large. Also, some in-place operations can be done in cache, while extra space operations must 
+be done in the memory, which costs more time. The \lstinline[language=c++]|std::sort()| always has the best performance, we will explain it in later part.
+
+Finally, we plot the performance of all sorting algorithms when the size of input arrays is quite small, namely less than $50$. The 
+result is calculated by taking average on 5 different input arrays with identical size.
+
+\begin{figure}[H]
+	\centerline{\includegraphics[height=7.5cm,width=15.5cm]{small.PNG}}
+	\caption{Small Size Cases for All Sorting Algorithms.}
+\end{figure}
+
+We can observe that two $O(nlogn)$ sorting algorithms perform worse when the input size is quite small since they have bigger constant. When the input size 
+is small, there is no big difference between $O(nlogn)$ and $O(n^2)$. The insertion
+sort performs best, which confirms our expectation.
+
+\section{Implementation of \lstinline[language=c++]|std::sort()|}
+\lstinline[language=c++]|std::sort()| is not simply quick sort. It's named as intro sort, which is a combination of quick sort, 
+insertion sort and heap sort. We know that insertion sort performs best when the input size is small, so when incoming array has small size (in gcc, this threshold is 16), 
+it will apply insertion sort instead of partition it again. Besides, when the recursion depth is too large, it will apply 
+heap sort, which has $O(nlogn)$ time complexity and $O(1)$ space complexity, to avoid stack overflow. For the quick sort 
+part, it also do some optimization like tail recursion and fast 3-way partitioning. These features make it become the best sorting 
+algorithm in most cases.
+
+\section{Reference}
+\begin{itemize}
+	\item[1.]
+	https://en.cppreference.com/w/cpp/algorithm/sort
+	\item[2.]
+	https://github.com/gcc-mirror/gcc/
+\end{itemize}
+
+
+\end{document}
