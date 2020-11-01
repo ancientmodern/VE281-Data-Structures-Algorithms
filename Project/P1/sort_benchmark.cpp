@@ -8,12 +8,6 @@
 #include "sort.hpp"
 using namespace std;
 
-template <typename T, typename Compare = std::less<T>>
-void std_sort(std::vector<T> &vector, Compare comp = Compare())
-{
-    std::sort(vector.begin(), vector.end(), comp);
-}
-
 static void BM_bubble_sort(benchmark::State &state)
 {
     for (auto _ : state)
@@ -121,19 +115,19 @@ static void BM_std_sort(benchmark::State &state)
 
 static void custom_args(benchmark::internal::Benchmark *b)
 {
-    int i = 1;
-    while (i <= 50)
+    int i = 10;
+    while (i <= 1e6)
     {
-        b->Arg(i++);
-        //i += pow(10, (int)log10(i));
+        b->Arg(i);
+        i += pow(10, (int)log10(i));
     }
 }
 
-//BENCHMARK(BM_bubble_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();        //用于注册测试函数
-//BENCHMARK(BM_insertion_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();     //用于注册测试函数
-//ENCHMARK(BM_selection_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();     //用于注册测试函数
-BENCHMARK(BM_merge_sort)->Arg(10000)->Arg(200000)->Complexity();         //用于注册测试函数
-BENCHMARK(BM_quick_sort_extra)->Arg(10000)->Arg(200000)->Complexity();   //用于注册测试函数
-//BENCHMARK(BM_quick_sort_inplace)->RangeMultiplier(10)->Apply(custom_args)->Complexity(); //用于注册测试函数
-//BENCHMARK(BM_std_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();           //用于注册测试函数
-BENCHMARK_MAIN(); //程序入口
+BENCHMARK(BM_bubble_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();        //用于注册测试函数
+BENCHMARK(BM_insertion_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();     //用于注册测试函数
+BENCHMARK(BM_selection_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();      //用于注册测试函数
+BENCHMARK(BM_merge_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();         //用于注册测试函数
+BENCHMARK(BM_quick_sort_extra)->RangeMultiplier(10)->Apply(custom_args)->Complexity();   //用于注册测试函数
+BENCHMARK(BM_quick_sort_inplace)->RangeMultiplier(10)->Apply(custom_args)->Complexity(); //用于注册测试函数
+BENCHMARK(BM_std_sort)->RangeMultiplier(10)->Apply(custom_args)->Complexity();           //用于注册测试函数
+BENCHMARK_MAIN();                                                                        //程序入口
