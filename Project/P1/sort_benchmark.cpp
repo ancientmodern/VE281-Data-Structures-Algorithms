@@ -115,11 +115,9 @@ static void BM_std_sort(benchmark::State &state)
 
 static void custom_args(benchmark::internal::Benchmark *b)
 {
-    int i = 10;
-    while (i <= 1e6)
+    for (int i = 10; i <= 1e6; i += pow(10, (int)log10(i)))
     {
         b->Arg(i);
-        i += pow(10, (int)log10(i));
     }
 }
 
