@@ -192,14 +192,11 @@ protected:                                                                 // DO
     size_t findMinimumBucketSize(size_t bucketSize) const
     {
         // TODO: implement this function
-        //std::cerr << "findMinimumBucketSize called: " << bucketSize << ' ' << (double)tableSize << ' ' << (double)buckets.size() * maxLoadFactor << "\n";
         if ((double)tableSize / (double)buckets.size() >= maxLoadFactor)
         {
-            //std::cerr << "into loop" << "\n";
             const size_t *first = HashPrime::g_a_sizes;
             const size_t *last = HashPrime::g_a_sizes + HashPrime::num_distinct_sizes;
             const size_t *pos = std::lower_bound(first, last, floor((double)tableSize / maxLoadFactor));
-            //std::cerr << "lower_bound finished: " << *pos << "\n";
             if (pos == last)
             {
                 throw std::range_error("range error");
@@ -337,7 +334,6 @@ public:
             return false;
         }
         tableSize++;
-        //std::cerr << "CHECK FOR REHASH: " << tableSize << ' ' << buckets.size() << ' ' << maxLoadFactor << "\n";
         if ((double)tableSize / (double)buckets.size() >= maxLoadFactor)
         {
             rehash(buckets.size());
@@ -346,14 +342,6 @@ public:
         HashNode p = {key, value};
         it.bucketIt->emplace_after(it.listItBefore, p);
         firstBucketIt = min(firstBucketIt, it.bucketIt);
-        // for (auto my_it = buckets.begin(); my_it != it.bucketIt; ++my_it)
-        // {
-        //     if (!(*my_it).empty())
-        //     {
-        //         firstBucketIt = my_it;
-        //         break;
-        //     }
-        // }
         it.endFlag = false;
         return true;
     }
