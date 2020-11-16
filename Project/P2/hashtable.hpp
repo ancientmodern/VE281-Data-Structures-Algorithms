@@ -333,16 +333,16 @@ public:
             it->second = value;
             return false;
         }
-        tableSize++;
+        ++tableSize;
+        HashNode p = {key, value};
+        it.bucketIt->emplace_after(it.listItBefore, p);
+        firstBucketIt = min(firstBucketIt, it.bucketIt);
+        it.endFlag = false;
         if ((double)tableSize / (double)buckets.size() >= maxLoadFactor)
         {
             rehash(buckets.size());
             it = find(key);
         }
-        HashNode p = {key, value};
-        it.bucketIt->emplace_after(it.listItBefore, p);
-        firstBucketIt = min(firstBucketIt, it.bucketIt);
-        it.endFlag = false;
         return true;
     }
 
@@ -394,7 +394,7 @@ public:
      * @param it
      * @return the iterator after the input iterator before the erase
      */
-    Iterator erase(Iterator &it) // TODO: should be const Iterator &it
+    Iterator erase(const Iterator &it) // TODO: should be const Iterator &it
     {
         // TODO: implement this function
         if (it.endFlag)
@@ -404,7 +404,7 @@ public:
         else
         {
             it.bucketIt->erase_after(it.listItBefore);
-            tableSize--;
+            --tableSize;
             if (firstBucketIt >= it.bucketIt)
             {
                 firstBucketIt = buckets.end();
