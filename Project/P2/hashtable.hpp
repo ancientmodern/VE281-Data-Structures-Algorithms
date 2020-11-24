@@ -192,14 +192,14 @@ protected:                                                                 // DO
     size_t findMinimumBucketSize(size_t bucketSize) const
     {
         // TODO: implement this function
-        if ((double)tableSize / (double)buckets.size() >= maxLoadFactor)
+        if (static_cast<double>(tableSize) / static_cast<double>(buckets.size()) >= maxLoadFactor)
         {
-            const size_t *first = HashPrime::g_a_sizes;
-            const size_t *last = HashPrime::g_a_sizes + HashPrime::num_distinct_sizes;
-            const size_t *pos = std::lower_bound(first, last, floor((double)tableSize / maxLoadFactor));
+            // learned from STL Source Code
+            const size_t *first = HashPrime::g_a_sizes, *last = HashPrime::g_a_sizes + HashPrime::num_distinct_sizes;
+            const size_t *pos = std::lower_bound(first, last, floor(static_cast<double>(tableSize) / maxLoadFactor));
             if (pos == last)
             {
-                throw std::range_error("range error");
+                throw std::range_error("Hao Zi Wei Zhi! Hao Hao Fan Si!");
             }
             else
             {
@@ -301,7 +301,7 @@ public:
         auto ptr = buckets[n].before_begin();
         for (auto ptr_front = buckets[n].begin(); ptr_front != buckets[n].end(); ++ptr_front, ++ptr)
         {
-            if ((*ptr_front).first == key)
+            if (ptr_front->first == key)
             {
                 Iterator it(this, buckets.begin() + n, ptr);
                 it.endFlag = false;
@@ -325,23 +325,22 @@ public:
      * @param value
      * @return whether insertion took place (return false if the key already exists)
      */
-    bool insert(Iterator &it, const Key &key, const Value &value) // TODO: should be const Iterator &it
+    bool insert(const Iterator &it, const Key &key, const Value &value) // TODO: should be const Iterator &it
     {
         // TODO: implement this function
         if (!it.endFlag)
         {
-            it->second = value;
+            auto copyNinja = it;
+            copyNinja->second = value;
             return false;
         }
         ++tableSize;
-        HashNode p = {key, value};
-        it.bucketIt->emplace_after(it.listItBefore, p);
+        HashNode cur = {key, value};
+        it.bucketIt->emplace_after(it.listItBefore, cur);
         firstBucketIt = min(firstBucketIt, it.bucketIt);
-        it.endFlag = false;
-        if ((double)tableSize / (double)buckets.size() >= maxLoadFactor)
+        if (static_cast<double>(tableSize) / static_cast<double>(buckets.size()) >= maxLoadFactor)
         {
             rehash(buckets.size());
-            it = find(key);
         }
         return true;
     }
@@ -379,11 +378,8 @@ public:
         {
             return false;
         }
-        else
-        {
-            erase(it);
-            return true;
-        }
+        erase(it);
+        return true;
     }
 
     /**
@@ -397,11 +393,7 @@ public:
     Iterator erase(const Iterator &it) // TODO: should be const Iterator &it
     {
         // TODO: implement this function
-        if (it.endFlag)
-        {
-            return it;
-        }
-        else
+        if (!it.endFlag)
         {
             it.bucketIt->erase_after(it.listItBefore);
             --tableSize;
@@ -410,15 +402,15 @@ public:
                 firstBucketIt = buckets.end();
                 for (auto my_it = it.bucketIt; my_it != buckets.end(); ++my_it)
                 {
-                    if (!(*my_it).empty())
+                    if (!my_it->empty())
                     {
                         firstBucketIt = my_it;
                         break;
                     }
                 }
             }
-            return it;
         }
+        return it;
     }
 
     /**
@@ -436,7 +428,8 @@ public:
         auto it = find(key);
         if (it.endFlag)
         {
-            insert(it, key, Value());
+            insert(it, key, Value{});
+            it = find(key);
         }
         return it->second;
     }
@@ -458,7 +451,7 @@ public:
 
         // TODO: implement this function
         HashTable big_table(bucketSize);
-        auto temp_size = tableSize;
+        auto tempSize = tableSize;
         for (auto &y : buckets)
         {
             for (auto &[key, value] : y)
@@ -467,7 +460,7 @@ public:
             }
         }
         copy_from(big_table);
-        tableSize = temp_size;
+        tableSize = tempSize;
     }
 
     /**
