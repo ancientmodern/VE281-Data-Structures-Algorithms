@@ -68,7 +68,7 @@ public:
             // TODO: implement this function
             if (node == nullptr)
             {
-                throw std::range_error("increment on end()");
+                throw std::range_error("JOJ不讲武德");
             }
             if (node->right != nullptr)
             {
@@ -101,7 +101,7 @@ public:
             // TODO: implement this function
             if (node == nullptr)
             {
-                throw std::range_error("decrement on begin()");
+                throw std::range_error("JOJ耗子尾汁");
             }
             if (node->left != nullptr)
             {
@@ -181,7 +181,8 @@ public:
         }
     };
 
-protected:                // DO NOT USE private HERE!
+    // protected:                // DO NOT USE private HERE!
+public:
     Node *root = nullptr; // root of the tree
     size_t treeSize = 0;  // size of the tree
 
@@ -389,41 +390,42 @@ protected:                // DO NOT USE private HERE!
         {
             if (node->left == nullptr && node->right == nullptr)
             {
-                if (node->parent != nullptr && node->parent->left == node)
-                {
-                    node->parent->left = nullptr;
-                }
-                else if (node->parent != nullptr && node->parent->right == node)
-                {
-                    node->parent->right = nullptr;
-                }
+                // if (node->parent != nullptr && node->parent->left == node)
+                // {
+                //     node->parent->left = nullptr;
+                // }
+                // else if (node->parent != nullptr && node->parent->right == node)
+                // {
+                //     node->parent->right = nullptr;
+                // }
                 --treeSize;
                 delete node;
+                // node = nullptr;
                 return nullptr;
             }
             else if (node->right != nullptr)
             {
                 Node *minNode = findMin<DIM, DIM_NEXT>(node->right);
-                Node *tempLeft = node->left, *tempRight = node->right;
-                node = new Node{minNode->key(), minNode->value(), node->parent};
-                node->left = tempLeft;
-                node->right = erase<DIM_NEXT>(tempRight, key);
-                // trash->left = nullptr;
-                // trash->right = nullptr;
-                // trash->parent = nullptr;
-                // delete trash;
+                // Node *tempLeft = node->left, *tempRight = node->right;
+                // node = new Node{minNode->key(), minNode->value(), node->parent};
+                // node->left = tempLeft;
+                // node->right = erase<DIM_NEXT>(tempRight, key);
+                auto &temp = const_cast<Key &>(node->key());
+                temp = minNode->key();
+                node->value() = minNode->value();
+                node->right = erase<DIM_NEXT>(node->right, temp); // pseudocode wrong
             }
             else if (node->left != nullptr)
             {
-                Node *maxNode = findMax<DIM, DIM_NEXT>(node->left), *trash = node;
-                Node *tempLeft = node->left, *tempRight = node->right;
-                node = new Node{maxNode->key(), maxNode->value(), node->parent};
-                node->right = tempRight;
-                node->left = erase<DIM_NEXT>(tempLeft, key);
-                // trash->left = nullptr;
-                // trash->right = nullptr;
-                // trash->parent = nullptr;
-                // delete trash;
+                Node *maxNode = findMax<DIM, DIM_NEXT>(node->left);
+                // Node *tempLeft = node->left, *tempRight = node->right;
+                // node = new Node{maxNode->key(), maxNode->value(), node->parent};
+                // node->right = tempRight;
+                // node->left = erase<DIM_NEXT>(tempLeft, key);
+                auto &temp = const_cast<Key &>(node->key());
+                temp = maxNode->key();
+                node->value() = maxNode->value();
+                node->left = erase<DIM_NEXT>(node->left, temp); // pseudocode wrong
             }
         }
         else
