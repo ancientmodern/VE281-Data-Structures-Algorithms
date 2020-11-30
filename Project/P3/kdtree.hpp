@@ -264,12 +264,14 @@ public:
      * @param compare
      * @return relationship of two keys on a dimension with the compare function
      */
-    template <size_t DIM, typename Compare>
-    static bool compareKey(const Key &a, const Key &b, Compare compare = Compare())
-    {
-        return compare(std::get<DIM>(a), std::get<DIM>(b));
+    template<size_t DIM, typename Compare>
+    static bool compareKey(const Key &a, const Key &b, Compare compare = Compare()) {
+        if (std::get<DIM>(a) != std::get<DIM>(b)){
+            return compare(std::get<DIM>(a), std::get<DIM>(b));
+        }
+        return compare(a, b);
     }
-
+    
     /**
      * Compare two nodes on a dimension
      * Time Complexity: O(1)
@@ -566,7 +568,6 @@ public:
 
     void insert(const Key &key, const Value &value)
     {
-        // std::cerr << "insert: " << value << std::endl;
         insert<0>(key, value, root, nullptr);
     }
 
