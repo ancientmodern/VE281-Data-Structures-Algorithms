@@ -264,14 +264,16 @@ public:
      * @param compare
      * @return relationship of two keys on a dimension with the compare function
      */
-    template<size_t DIM, typename Compare>
-    static bool compareKey(const Key &a, const Key &b, Compare compare = Compare()) {
-        if (std::get<DIM>(a) != std::get<DIM>(b)){
+    template <size_t DIM, typename Compare>
+    static bool compareKey(const Key &a, const Key &b, Compare compare = Compare())
+    {
+        if (std::get<DIM>(a) != std::get<DIM>(b))
+        {
             return compare(std::get<DIM>(a), std::get<DIM>(b));
         }
         return compare(a, b);
     }
-    
+
     /**
      * Compare two nodes on a dimension
      * Time Complexity: O(1)
@@ -503,9 +505,13 @@ public:
      * Time complexity: O(kn log n)
      * @param v we pass by value here because v need to be modified
      */
-    explicit KDTree(std::vector<std::pair<Key, Value>> v)
+    explicit KDTree(std::vector<std::pair<Key, Value>> v) : root(nullptr), treeSize(0)
     {
         // TODO: implement this function
+        if (v.empty())
+        {
+            return;
+        }
         std::stable_sort(v.begin(), v.end());
         auto last = std::unique(v.rbegin(), v.rend(), [](const std::pair<Key, Value> &lhs, const std::pair<Key, Value> &rhs) {
             return lhs.first == rhs.first;
