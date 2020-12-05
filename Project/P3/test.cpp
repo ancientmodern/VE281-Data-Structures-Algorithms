@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
     
-    vector<pair<tuple<int, int, int>, int>> v;
+    vector<pair<tuple<int, int, int>, int>> v{};
     KDTree<tuple<int, int, int>, int> tree{v};
     // auto &x = const_cast<tuple<int, int, int> &>(tree.root->key());
     // x = {1, 2, 3};
