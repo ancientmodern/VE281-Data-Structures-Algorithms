@@ -505,7 +505,7 @@ public:
      * Time complexity: O(kn log n)
      * @param v we pass by value here because v need to be modified
      */
-    explicit KDTree(std::vector<std::pair<Key, Value>> v) : root(nullptr), treeSize(0)
+    explicit KDTree(std::vector<std::pair<Key, Value>> v) : root(nullptr), treeSize(v.size())
     {
         // TODO: implement this function
         if (v.empty())
@@ -518,7 +518,7 @@ public:
         });
         v.erase(v.begin(), last.base());
         this->root = initial<0>(v, 0, static_cast<int>(v.size()) - 1, nullptr);
-        this->treeSize = v.size();
+        // this->treeSize = v.size();
     }
 
     /**
