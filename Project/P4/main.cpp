@@ -11,7 +11,7 @@ class Graph
 public:
     typedef std::pair<size_t, size_t> valNode;
 
-protected:
+private:
     struct Edge
     {
         size_t start = 0, end = 0, weight = 0;
@@ -209,7 +209,25 @@ protected:
     }
 
 public:
-    Graph() = default;
+    Graph()
+    {
+        std::cin >> numNode >> sourceIndex >> destIndex;
+
+        nodes.resize(numNode);
+        for (size_t i = 0; i < numNode; ++i)
+        {
+            nodes[i] = new Node{i};
+        }
+
+        size_t startNode, endNode, weight;
+        for (; std::cin >> startNode >> endNode >> weight; ++numEdge)
+        {
+            Edge *e = new Edge{startNode, endNode, weight};
+            nodes[startNode]->next.emplace_back(e);
+            nodes[endNode]->pre.emplace_back(e);
+            edges.emplace_back(e);
+        }
+    }
 
     ~Graph()
     {
@@ -219,23 +237,11 @@ public:
         }
     }
 
-    explicit Graph(size_t _numNode, size_t _sourceIndex, size_t _destIndex) : numNode(_numNode), sourceIndex(_sourceIndex), destIndex(_destIndex)
+    void P4()
     {
-        nodes.resize(numNode);
-        for (size_t i = 0; i < numNode; ++i)
-        {
-            nodes[i] = new Node{i};
-        }
-
-        size_t startNode, endNode, weight;
-        while (std::cin >> startNode >> endNode >> weight)
-        {
-            ++numEdge;
-            Edge *e = new Edge{startNode, endNode, weight};
-            nodes[startNode]->next.emplace_back(e);
-            nodes[endNode]->pre.emplace_back(e);
-            edges.emplace_back(e);
-        }
+        shortestPath();
+        isDAG();
+        MST();
     }
 
     void shortestPath()
@@ -282,12 +288,6 @@ public:
 
 int main()
 {
-    size_t numNodes, sourceIndex, destIndex;
-    std::cin >> numNodes;
-    std::cin >> sourceIndex;
-    std::cin >> destIndex;
-    Graph graph{numNodes, sourceIndex, destIndex};
-    graph.shortestPath();
-    graph.isDAG();
-    graph.MST();
+    Graph graph;
+    graph.P4();
 }
