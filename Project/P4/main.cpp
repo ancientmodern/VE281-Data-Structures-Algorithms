@@ -288,6 +288,6 @@ public:
 
 int main()
 {
-    Graph graph;
+    Graph graph{};
     graph.P4();
 }
