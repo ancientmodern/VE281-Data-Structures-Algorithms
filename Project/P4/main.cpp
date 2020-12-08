@@ -27,8 +27,8 @@ private:
     {
     private:
         size_t index = 0;
-        std::vector<Edge *> pre;
-        std::vector<Edge *> next;
+        std::vector<const Edge *> pre;
+        std::vector<const Edge *> next;
 
     public:
         friend class Graph;
@@ -51,7 +51,7 @@ private:
 
     size_t numNode = 0, numEdge = 0, sourceIndex = 0, destIndex = 0;
     std::vector<Node *> nodes;
-    std::vector<Edge *> edges;
+    std::vector<const Edge *> edges;
     std::vector<size_t> parent;
 
     size_t dijkstra()
@@ -226,7 +226,7 @@ public:
         size_t startNode, endNode, weight;
         for (; std::cin >> startNode >> endNode >> weight; ++numEdge)
         {
-            Edge *e = new Edge{startNode, endNode, weight};
+            const Edge *e = new Edge{startNode, endNode, weight};
             nodes[startNode]->next.emplace_back(e);
             nodes[endNode]->pre.emplace_back(e);
             edges.emplace_back(e);
