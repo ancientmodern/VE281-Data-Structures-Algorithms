@@ -16,7 +16,9 @@ private:
     {
         size_t start = 0, end = 0, weight = 0;
 
-        Edge(size_t _start, size_t _end, size_t _weight) : start(_start), end(_end), weight(_weight)
+        Edge() = default;
+
+        explicit Edge(size_t _start, size_t _end, size_t _weight) : start(_start), end(_end), weight(_weight)
         {
         }
     };
@@ -31,7 +33,9 @@ private:
     public:
         friend class Graph;
 
-        Node(size_t _index) : index(_index)
+        Node() = default;
+
+        explicit Node(size_t _index) : index(_index)
         {
         }
 
