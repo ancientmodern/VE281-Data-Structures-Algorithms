@@ -101,6 +101,14 @@ public:
             // TODO: implement this function
             if (node == nullptr)
             {
+                node = tree->root;
+                while (node->right != nullptr)
+                {
+                    node = node->right;
+                }
+            }
+            if (node->parent == nullptr)
+            {
                 throw std::range_error("JOJ耗子尾汁");
             }
             if (node->left != nullptr)
