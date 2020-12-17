@@ -1,8 +1,8 @@
-#include <iostream>
 #include <algorithm>
-#include <vector>
-#include <queue>
 #include <cmath>
+#include <iostream>
+#include <queue>
+#include <vector>
 
 constexpr size_t INF = 1000000000;
 
@@ -18,9 +18,8 @@ private:
 
         Edge() = default;
 
-        explicit Edge(size_t _start, size_t _end, size_t _weight) : start(_start), end(_end), weight(_weight)
-        {
-        }
+        explicit Edge(size_t _start, size_t _end, size_t _weight)
+            : start(_start), end(_end), weight(_weight) {}
     };
 
     class Node
@@ -35,9 +34,7 @@ private:
 
         Node() = default;
 
-        explicit Node(size_t _index) : index(_index)
-        {
-        }
+        explicit Node(size_t _index) : index(_index) {}
 
         ~Node()
         {
@@ -56,7 +53,8 @@ private:
 
     size_t dijkstra()
     {
-        std::priority_queue<valNode, std::vector<valNode>, std::greater<valNode>> pq;
+        std::priority_queue<valNode, std::vector<valNode>, std::greater<valNode>>
+            pq;
         std::vector<size_t> dist(numNode, INF);
 
         pq.emplace(std::make_pair(0, sourceIndex));
@@ -108,7 +106,7 @@ private:
             for (auto &e : temp->next)
             {
                 size_t i = e->end;
-                if (--inDegree[i] == 0 && !visited[i])
+                if (!visited[i] && --inDegree[i] == 0)
                 {
                     q.emplace(nodes[i]);
                     visited[i] = true;
@@ -129,7 +127,8 @@ private:
 
     size_t prim()
     {
-        std::priority_queue<valNode, std::vector<valNode>, std::greater<valNode>> pq;
+        std::priority_queue<valNode, std::vector<valNode>, std::greater<valNode>>
+            pq;
         std::vector<bool> inMST(numNode, false);
         std::vector<size_t> cost(numNode, INF);
         size_t sum = 0, cnt = 0;
@@ -275,9 +274,10 @@ public:
 
     void MST()
     {
-        size_t totWeight;
-        double _numNode = numNode, _numEdge = numEdge;
-        totWeight = (_numEdge > _numNode * std::log(_numNode)) ? prim() : kruskal();
+        double _numNode = static_cast<double>(numNode),
+               _numEdge = static_cast<double>(numEdge);
+        size_t totWeight =
+            (_numEdge > _numNode * std::log(_numNode)) ? prim() : kruskal();
 
         if (totWeight == INF)
         {
