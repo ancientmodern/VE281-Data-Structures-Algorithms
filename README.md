@@ -7,3 +7,6 @@ UM-SJTU JI VE281
 + 2020-11-25 Finish P3.
 + 2020-12-12 Finish P4.
 + 2020-12-17 Survive!
+
+## Note
+P3 has some bugs in the function `operator=`
