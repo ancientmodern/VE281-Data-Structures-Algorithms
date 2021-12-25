@@ -7,6 +7,7 @@ UM-SJTU JI VE281
 + 2020-11-25 Finish P3.
 + 2020-12-12 Finish P4.
 + 2020-12-17 Survive!
++ Finally got A+, thanks Prof. Xin!
 
 ## Note
 **P3 has some bugs in the function `operator=`, which would unexpectedly cost a lot of memory.**
