@@ -9,4 +9,4 @@ UM-SJTU JI VE281
 + 2020-12-17 Survive!
 
 ## Note
-P3 has some bugs in the function `operator=`
+**P3 has some bugs in the function `operator=`, which would unexpectedly cost a lot of memory.**
