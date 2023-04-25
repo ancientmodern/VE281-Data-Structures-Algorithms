@@ -10,4 +10,4 @@ UM-SJTU JI VE281
 + Finally got A+, thanks Prof. Xin!
 
 ## Note
-**P3 has some bugs in the function `operator=`, which would unexpectedly cost a lot of memory.**
+**P3 has some bugs in the function `operator=`, which would unexpectedly cost a lot of memory. Remember to check the self-assignment first and destory the original instance. I'm too stupid at that time...**
