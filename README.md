@@ -1,5 +1,5 @@
 # VE281 - Data Structures and Algorithms (Fall 2020)
-Welcome to the repo for Fall 2020 VE281 - Data Structures and Algorithms.
+Welcome to the repo for Fall 2020 VE 281 - Data Structures and Algorithms.
 
 **For academic integrity, we advise you to thoroughly review the JI Honor Code available [here](https://www.ji.sjtu.edu.cn/academics/academic-integrity/honor-code/).**
 
